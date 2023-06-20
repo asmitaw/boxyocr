@@ -3,10 +3,7 @@
 Here's our first attempt at using data to create a table:
 """
 
-import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 import streamlit as st
 
 from PIL import Image
