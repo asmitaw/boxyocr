@@ -1,0 +1,4 @@
+pytorch 
+torchvision
+streamlit
+easyocr
