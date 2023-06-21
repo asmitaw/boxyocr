@@ -98,11 +98,12 @@ def openCVEasyOCR(img):
     print("<td>" + print_text + "</td>")
     return img , print_text
 
-st.title("Boxylink Cloud - OCR demo for TTK")
+st.title("BoxyLink Cloud - OCR demo")
 st.divider()
 col1, col2 = st.columns([2, 2])
 image = np.zeros((300,300,3), np.uint8)
 result_text = ""
+
 with col1:
    st.subheader("Upload Files here")
    uploaded_files = st.file_uploader("", accept_multiple_files=True)
@@ -111,6 +112,8 @@ with col1:
 #uploaded_file = st.file_uploader("Choose a image file", type="jpg")
 
     if uploaded_file is not None:
+        de_skew = st.checkbox('screw images before running')
+
     # Convert the file to an opencv image.
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         image = cv2.imdecode(file_bytes, 1)
@@ -118,7 +121,7 @@ with col1:
     # Now do something with the image! For example, let's display it:
 #       bytes_data = uploaded_file.read()
         st.image(image, caption='Uploaded Image', use_column_width=True, channels="BGR")
-        de_skew = False
+       # de_skew = False
         d_img = image
         if de_skew:
             deskew_image(image)
