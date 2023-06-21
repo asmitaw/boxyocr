@@ -139,19 +139,20 @@ image = np.zeros((300,300,3), np.uint8)
 result_text = ""
 
 with col1:
-   st.subheader("Upload Files here")
-   uploaded_files = st.file_uploader("", accept_multiple_files=False)
-   for uploaded_file in uploaded_files:
-
-#uploaded_file = st.file_uploader("Choose a image file", type="jpg")
+    st.subheader("Upload Files here")
+    uploaded_file = st.file_uploader("", accept_multiple_files=False)
+    #  for uploaded_file in uploaded_files:
+ 
+    #uploaded_file = st.file_uploader("Choose a image file", type="jpg")
+    de_skew = st.checkbox('Skew images before detection',value=True )
 
     if uploaded_file is not None:
-        de_skew = st.checkbox('Skew images before detection')
+    # de_skew = st.checkbox('Skew images before detection',value=True )
 
     # Convert the file to an opencv image.
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         image = cv2.imdecode(file_bytes, 1)
-        image = resizeAndPad(image, (800,800), 255)
+        image = resizeAndPad(image, (1200,1200), 255)
 
     # Now do something with the image! For example, let's display it:
 #       bytes_data = uploaded_file.read()
@@ -174,4 +175,3 @@ with col2:
 
 # SHOW PROJECTED IMAGE
 #   st.image(image, caption='Image with OCR results', use_column_width=True)
-        
