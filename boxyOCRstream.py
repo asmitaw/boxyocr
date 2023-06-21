@@ -15,17 +15,45 @@ import numpy as np
 import streamlit as st
 from PIL import Image
  
-#Add Streamlit widgets
-#Streamlit also makes it easy to add interactivity to your app with widgets like sliders, dropdown menus, and checkboxes. For example, you can add a slider to your app that allows users to control the value of a parameter in your model like this:
+def resizeAndPad(img, size, padColor=255):
 
- 
-def compress_image(image):
-    # let's downscale the image using new  width and height
-    down_width = 1200
-    down_height = 1200
-    down_points = (down_width, down_height)
-    compressed_img = cv2.resize(image, down_points, interpolation= cv2.INTER_LINEAR)
-    return compressed_img
+    h, w = img.shape[:2]
+    sh, sw = size
+
+    # interpolation method
+    if h > sh or w > sw: # shrinking image
+        interp = cv2.INTER_AREA
+
+    else: # stretching image
+        interp = cv2.INTER_CUBIC
+
+    # aspect ratio of image
+    aspect = float(w)/h 
+    saspect = float(sw)/sh
+
+    if (saspect > aspect) or ((saspect == 1) and (aspect <= 1)):  # new horizontal image
+        new_h = sh
+        new_w = np.round(new_h * aspect).astype(int)
+        pad_horz = float(sw - new_w) / 2
+        pad_left, pad_right = np.floor(pad_horz).astype(int), np.ceil(pad_horz).astype(int)
+        pad_top, pad_bot = 0, 0
+
+    elif (saspect < aspect) or ((saspect == 1) and (aspect >= 1)):  # new vertical image
+        new_w = sw
+        new_h = np.round(float(new_w) / aspect).astype(int)
+        pad_vert = float(sh - new_h) / 2
+        pad_top, pad_bot = np.floor(pad_vert).astype(int), np.ceil(pad_vert).astype(int)
+        pad_left, pad_right = 0, 0
+
+    # set pad color
+    if len(img.shape) is 3 and not isinstance(padColor, (list, tuple, np.ndarray)): # color image but only one color provided
+        padColor = [padColor]*3
+
+    # scale and pad
+    scaled_img = cv2.resize(img, (new_w, new_h), interpolation=interp)
+    scaled_img = cv2.copyMakeBorder(scaled_img, pad_top, pad_bot, pad_left, pad_right, borderType=cv2.BORDER_CONSTANT, value=padColor)
+
+    return scaled_img
 
 
 
@@ -123,12 +151,11 @@ with col1:
     # Convert the file to an opencv image.
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         image = cv2.imdecode(file_bytes, 1)
-        image = compress_image(image)
+        image = resizeAndPad(image, (1200,1200), 255)
 
     # Now do something with the image! For example, let's display it:
 #       bytes_data = uploaded_file.read()
         st.image(image, caption='Uploaded Image', use_column_width=True, channels="BGR")
-       # de_skew = False
         d_img = image
     
        #compressing image before processing 
@@ -147,3 +174,4 @@ with col2:
 
 # SHOW PROJECTED IMAGE
 #   st.image(image, caption='Image with OCR results', use_column_width=True)
+        
