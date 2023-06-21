@@ -151,7 +151,7 @@ with col1:
     # Convert the file to an opencv image.
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         image = cv2.imdecode(file_bytes, 1)
-        image = resizeAndPad(image, (1200,1200), 255)
+        image = resizeAndPad(image, (800,800), 255)
 
     # Now do something with the image! For example, let's display it:
 #       bytes_data = uploaded_file.read()
