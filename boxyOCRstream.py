@@ -21,8 +21,8 @@ from PIL import Image
  
 def compress_image(image):
     # let's downscale the image using new  width and height
-    down_width = 800
-    down_height = 800
+    down_width = 1000
+    down_height = 1000
     down_points = (down_width, down_height)
     compressed_img = cv2.resize(image, down_points, interpolation= cv2.INTER_LINEAR)
     return compressed_img
