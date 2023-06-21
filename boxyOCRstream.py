@@ -112,7 +112,7 @@ with col1:
 #uploaded_file = st.file_uploader("Choose a image file", type="jpg")
 
     if uploaded_file is not None:
-        de_skew = st.checkbox('screw images before running')
+        de_skew = st.checkbox('Skew images before running')
 
     # Convert the file to an opencv image.
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
