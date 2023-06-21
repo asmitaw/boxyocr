@@ -17,12 +17,18 @@ from PIL import Image
  
 #Add Streamlit widgets
 #Streamlit also makes it easy to add interactivity to your app with widgets like sliders, dropdown menus, and checkboxes. For example, you can add a slider to your app that allows users to control the value of a parameter in your model like this:
- 
 
-def get_opencv_img_from_buffer(buffer, flags=0):
-    bytes_as_np_array = np.frombuffer(buffer.read(), dtype=np.uint8)
-    return cv2.imdecode(bytes_as_np_array, flags)
  
+def compress_image(image):
+    # let's downscale the image using new  width and height
+    down_width = 800
+    down_height = 800
+    down_points = (down_width, down_height)
+    compressed_img = cv2.resize(image, down_points, interpolation= cv2.INTER_LINEAR)
+    return compressed_img
+
+
+
 def deskew_image(image):
     # Convert the image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -112,17 +118,21 @@ with col1:
 #uploaded_file = st.file_uploader("Choose a image file", type="jpg")
 
     if uploaded_file is not None:
-        de_skew = st.checkbox('Skew images before running')
+        de_skew = st.checkbox('Skew images before detection')
 
     # Convert the file to an opencv image.
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         image = cv2.imdecode(file_bytes, 1)
+        image = compress_image(image)
 
     # Now do something with the image! For example, let's display it:
 #       bytes_data = uploaded_file.read()
         st.image(image, caption='Uploaded Image', use_column_width=True, channels="BGR")
        # de_skew = False
         d_img = image
+    
+       #compressing image before processing 
+
         if de_skew:
             deskew_image(image)
             d_img = deskew_image (image)
@@ -137,4 +147,3 @@ with col2:
 
 # SHOW PROJECTED IMAGE
 #   st.image(image, caption='Image with OCR results', use_column_width=True)
-        
