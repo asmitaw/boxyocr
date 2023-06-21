@@ -140,7 +140,7 @@ result_text = ""
 
 with col1:
    st.subheader("Upload Files here")
-   uploaded_files = st.file_uploader("", accept_multiple_files=True)
+   uploaded_files = st.file_uploader("", accept_multiple_files=False)
    for uploaded_file in uploaded_files:
 
 #uploaded_file = st.file_uploader("Choose a image file", type="jpg")
