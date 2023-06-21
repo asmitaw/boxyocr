@@ -175,3 +175,4 @@ with col2:
 
 # SHOW PROJECTED IMAGE
 #   st.image(image, caption='Image with OCR results', use_column_width=True)
+        
